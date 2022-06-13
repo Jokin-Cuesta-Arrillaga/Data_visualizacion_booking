@@ -1,6 +1,5 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
+# Shiny web application.
 #
 
 library(shiny)
@@ -119,5 +118,5 @@ server <- function(input, output,session) {
   })
 }
 
-# Run the application 
+# Iniciamos la aplicación
 shinyApp(ui = ui, server = server)
