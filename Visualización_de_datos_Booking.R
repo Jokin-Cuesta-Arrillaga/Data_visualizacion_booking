@@ -2,10 +2,6 @@
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
 #
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
 
 library(shiny)
 df = read.csv('C:/Users/Jokin Cuesta/Documents/DATA_VIS_PEC4/Hotel_Reviews.csv')
@@ -18,7 +14,7 @@ library(leaflet.extras)
 library(scales)
 library(DT)
 
-# Define UI for application that draws a histogram
+# Definimos la UI
 ui <- fluidPage(
   navbarPage("Reviews", id="rev",
              tabPanel("Mapa Interactivo",
@@ -63,14 +59,14 @@ ui <- fluidPage(
              )
   )
 )
-# Define server logic required to draw a histogram
+# Definimos el server logic
 server <- function(input, output,session) {
   output$mymap <- renderLeaflet({
     
     hotel.names = df %>% 
       select(lat,lng,Hotel_Name, Hotel_Address, Average_Score, Total_Number_of_Reviews,
              Review_Total_Positive_Word_Counts, Review_Total_Negative_Word_Counts) %>%
-      #Remove the 17 records without geo coordinates
+      #Quitamos 17 entradas sin valores geoespaciales
       filter(lat != 0 & lng != 0 & Average_Score > input$puntuacion) %>%
       group_by(Hotel_Name, Hotel_Address, lng, lat, Average_Score, Total_Number_of_Reviews) %>%
       summarise(Tot_Pos_Words = sum(Review_Total_Positive_Word_Counts),
@@ -100,10 +96,10 @@ server <- function(input, output,session) {
   output$histplot<- renderPlot({
     hotel.names = df %>% 
       select(Hotel_Name,Average_Score,lat,lng) %>%
-      #Remove the 17 records without geo coordinates
+      #Quitamos 17 entradas sin valores geoespaciales
       filter(lat != 0 & lng != 0 & Average_Score > input$puntuacion) %>%
       group_by(Hotel_Name)
-    # generate bins based on input$bins from ui.R
+    
     x <- hotel.names$Average_Score
     
     # draw the histogram with the specified number of bins
